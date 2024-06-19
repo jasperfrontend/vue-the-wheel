@@ -108,8 +108,8 @@ export default {
 
 p {
   position: absolute;
-  width: 80px;
-  left: 50%;
+  width: 150px;
+  left: 42%;
   text-align: center;
   transform-origin: center;
   transform: translateX(-50%) translateY(-100%);
