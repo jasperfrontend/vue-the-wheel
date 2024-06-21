@@ -1,10 +1,7 @@
 <script setup>
-import { createClient } from '@supabase/supabase-js'
 import { onMounted, ref } from 'vue'
+import { supabase } from '@/lib/supabase';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey);
 const categories = ref([]);
 const spinResults = ref(null);
 const spinResult = ref(null);
