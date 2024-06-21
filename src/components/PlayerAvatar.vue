@@ -1,6 +1,6 @@
 <template>
   <v-avatar 
-    image="https://static-cdn.jtvnw.net/jtv_user_pictures/169db444-6ddc-4a75-a607-8e26f0f2197d-profile_image-300x300.jpeg" 
+    image="https://static-cdn.jtvnw.net/jtv_user_pictures/a3902ed9-70ce-4a1f-8a9c-197d538a0a0c-profile_image-70x70.png" 
     size="70" 
     class="rounded-circle"
     >

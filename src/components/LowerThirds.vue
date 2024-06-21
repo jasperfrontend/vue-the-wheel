@@ -15,6 +15,10 @@
 </template>
 
 <style scoped>
+.lower_thirds {
+  position: relative;
+  z-index: 22;
+}
 .column_left,
 .column_right {
   width: 45%;
