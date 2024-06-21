@@ -1,3 +1,7 @@
+<script setup>
+import PlayersQueue from './PlayersQueue.vue';
+</script>
+
 <template>
   <div class="lower_thirds w-100 d-flex justify-space-between">
     <!-- Player left -->

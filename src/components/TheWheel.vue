@@ -20,7 +20,7 @@ async function getCategories() {
   isLoading.value = true;
 
   // go on a Date
-  const tenHoursInMilliseconds = 10000;
+  const tenHoursInMilliseconds = 3600 * 10 * 1000;
   const tenHoursAgo = new Date(Date.now() - tenHoursInMilliseconds).toISOString();
 
   const { data:spinCategories, error:spinCategoriesError } = await supabase
