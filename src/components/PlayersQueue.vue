@@ -1,13 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import { supabase } from '@/lib/supabase';
-import PlayerAvatar from './PlayerAvatar.vue';
+import { useRoundStore } from '@/stores/round';
+import { supabase } from '@/lib/supabaseClient';
+import PlayerAvatar from '@/components/PlayerAvatar.vue';
+import PlayerName from '@/components/PlayerName.vue';
 
 const isLoading = ref(false);
 const playerModal = ref(false);
 const playersData = ref([]);
 const errorMessage = ref(null);
 const errorShown = ref(false);
+
+// Pinia Store
+const roundStore = useRoundStore();
 
 async function getPlayers() {
   isLoading.value = true;
@@ -27,6 +32,18 @@ async function getPlayers() {
   }
 }
 
+async function setPlayer(pos, uid) {
+  console.log(pos + ', ' + uid);
+
+  if(pos === 1) {
+    await roundStore.setPlayer1Uid(uid).then(console.log('player 1 logged'))
+  }
+  if(pos === 2) {
+    await roundStore.setPlayer2Uid(uid).then(console.log('player 2 logged'));
+  }
+}
+
+
 onMounted(() => {
   getPlayers();
 });
@@ -36,14 +53,25 @@ onMounted(() => {
 <template>
   <div class="scroll-container">
     <div class="bg-deep-purple-darken-1 pa-1 rounded-t" style="position: relative; z-index: 10;">
-      <p><v-btn @click="playerModal = true" class="w-100 bg-deep-purple-darken-1 pa-1 h-auto" elevation="0">Player Queue</v-btn></p>
+      <p>
+        <v-btn 
+          @click="playerModal = true" 
+          class="w-100 bg-deep-purple-darken-1 pa-1 h-auto" 
+          elevation="0"
+          >Player Queue
+        </v-btn>
+      </p>
     </div>
-    <div class="scroll-content pa-1" v-for="player in playersData" :key="player.id">
-      <div class="item">{{ player.name }}</div>
+    <div class="scroll-content pa-1">
+      <div 
+        class="item" 
+        v-for="player in playersData" :key="player.id"
+        >
+          <PlayerName :uid="player.uid" />
+        </div>
     </div>
   </div>
   <v-snackbar v-model="errorShown" duration="3000" color="red">{{ errorMessage }}
-
     <template v-slot:actions>
       <v-btn
         @click="errorShown = false"
@@ -51,7 +79,6 @@ onMounted(() => {
         Close
       </v-btn>
     </template>
-
   </v-snackbar>
   <v-dialog
     v-model="playerModal"
@@ -59,19 +86,66 @@ onMounted(() => {
     scrim="black"
     opacity="0.9"
   >
-    <h2 class="text-center">Player Queue</h2>
+    <h2 
+      class="text-center">Player Queue 
+      <v-btn @click="getPlayers();" class="ml-3">Refresh</v-btn>
+    </h2>
     <div class="d-flex flex-wrap text-center align-center justify-space-between">
-
       <div class="ma-5" v-for="player in playersData">
         <v-sheet class="pa-3 rounded" width="260">          
-          <PlayerAvatar :image="player.avatar_url" />
-          <v-btn @click="playerModal = false" class="bg-deep-purple-darken-1 w-100 my-2 pa-2">{{ player.name }}</v-btn>
-          <div class="d-flex justify-space-between align-center">
-            <span class="pa-1 text-blue-grey-lighten-1"><v-icon size="small" color="deep-purple-lighten-2" icon="mdi-cards-playing-diamond-multiple"></v-icon> 52</span>
-            <span class="pa-1 text-blue-grey-lighten-1"><v-icon size="small" color="deep-purple-lighten-2" icon="mdi-plus-box"></v-icon> 36</span>
-            <span class="pa-1 text-blue-grey-lighten-1"><v-icon size="small" color="deep-purple-lighten-2" icon="mdi-minus-box"></v-icon> 12</span>
-            <span class="pa-1 text-blue-grey-lighten-1"><v-icon size="small" color="deep-purple-lighten-2" icon="mdi-equal-box"></v-icon> 4</span>
+          <PlayerAvatar :uid="player.uid" />
+          <PlayerName :uid="player.uid" />
+          <div class="d-flex justify-space-between">
+            <div>
+              <v-btn 
+                @click="setPlayer(1, player.uid);" 
+                class="bg-black w-100 my-2 pa-2"
+                >Set P1
+              </v-btn>
+            </div>
+            <div>
+              <v-btn 
+                @click="playerModal = false; setPlayer(2, player.uid);" 
+                class="bg-black w-100 my-2 pa-2"
+                >Set P2
+              </v-btn>
+            </div>
           </div>
+
+          <!-- <div class="player_stats d-flex justify-space-between align-center">
+            <span class="pa-1 text-blue-grey-lighten-1">
+              <v-icon 
+                size="small" 
+                color="deep-purple-lighten-2" 
+                icon="mdi-dice-multiple"
+                >
+              </v-icon> 52
+            </span>
+            <span class="pa-1 text-blue-grey-lighten-1">
+              <v-icon 
+                size="small" 
+                color="deep-purple-lighten-2" 
+                icon="mdi-plus-box"
+                >
+              </v-icon> 36
+            </span>
+            <span class="pa-1 text-blue-grey-lighten-1">
+              <v-icon 
+                size="small" 
+                color="deep-purple-lighten-2" 
+                icon="mdi-minus-box"
+                >
+              </v-icon> 12
+            </span>
+            <span class="pa-1 text-blue-grey-lighten-1">
+              <v-icon 
+                size="small" 
+                color="deep-purple-lighten-2" 
+                icon="mdi-equal-box"
+                >
+              </v-icon> 4
+            </span>
+          </div> -->
         </v-sheet>
       </div>  
       
@@ -94,6 +168,11 @@ onMounted(() => {
 
 .item {
   height: 25px;
+}
+
+.player_stats .v-icon {
+  position: relative;
+  transform: translateY(-2px);
 }
 
 @keyframes scroll {

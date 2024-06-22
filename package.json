@@ -12,6 +12,7 @@
     "@supabase/supabase-js": "^2.43.5",
     "core-js": "^3.34.0",
     "env": "^0.0.2",
+    "pinia": "^2.1.7",
     "roboto-fontface": "*",
     "vue": "^3.4.0",
     "vuetify": "^3.5.0"

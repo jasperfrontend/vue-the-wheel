@@ -1,20 +1,28 @@
 <script setup>
 import PlayersQueue from './PlayersQueue.vue';
+import Player from './Player.vue';
+import { useRoundStore } from '@/stores/round';
+// Pinia Store
+const store = useRoundStore();
 </script>
 
 <template>
   <div class="lower_thirds w-100 d-flex justify-space-between">
+
     <!-- Player left -->
     <div class="column_left ma-1 mr-0 bg-blue-grey-darken-4 rounded">
-      <Player side="left" :duration="320" :currentTime="0" song="Metallica - One" />
+      <Player v-if="store.player1Uid" :uid="store.player1Uid" side="left" :currentTime="0" :song="store.player1Song" /> <!-- :duration="<seconds>" to start countdown -->
     </div>
+
     <div class="column_center ma-1 bg-blue-grey-darken-3 rounded">
       <PlayersQueue />
     </div>
+
     <!-- Player right -->
     <div class="column_right ma-1 ml-0 bg-blue-grey-darken-4 rounded">
-      <Player side="right" :currentTime="0" song="Roxette - The Look" /> <!-- :duration="<seconds>" to start countdown -->
+      <Player v-if="store.player2Uid" :uid="store.player2Uid" side="right" :currentTime="0" :song="store.player2Song" /> <!-- :duration="<seconds>" to start countdown -->
     </div>
+    
   </div>
 </template>
 

@@ -1,11 +1,8 @@
 <script setup>
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabaseClient';
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const session = ref()
 const router = useRouter()
@@ -73,4 +70,5 @@ html, body {
   width: 100vw;
   overflow: hidden;
 }
+
 </style>

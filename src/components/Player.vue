@@ -1,15 +1,18 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import PlayerSong from '@/components/PlayerSong.vue';
+import PlayerAvatar from '@/components/PlayerAvatar.vue';
+import PlayerName from '@/components/PlayerName.vue';
 
 const props = defineProps({
   side: String,
   duration: Number,
   currentTime: Number,
-  song: String
+  song: String,
+  uid: String,
 });
 
 const currentTime = ref(props.currentTime);
-
 // Update currentTime every second
 onMounted(() => {
   setInterval(() => {
@@ -26,10 +29,12 @@ watch(() => props.currentTime, (newVal) => {
 
 <template>
   <div :class="side">
+    
     <PlayerSong :duration="props.duration" :currentTime="currentTime" :song="props.song" />
+
     <div class="player_data d-flex align-center pa-1 px-2">
-      <PlayerAvatar size="50" />
-      <PlayerName class="pa-3 text-h6" />
+      <PlayerAvatar :uid="uid" size="50" />
+      <PlayerName :uid="uid" :class="['pa-3', 'text-h6']" />
     </div>
   </div>
 </template>
