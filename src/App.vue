@@ -70,5 +70,7 @@ html, body {
   width: 100vw;
   overflow: hidden;
 }
-
+.right .player_data {
+  flex-flow: row-reverse;
+}
 </style>

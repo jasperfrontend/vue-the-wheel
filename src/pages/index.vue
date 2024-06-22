@@ -1,18 +1,15 @@
 <script setup>
 import { ref } from 'vue';
-import { useRoundStore } from '@/stores/round';
 import TheWheel from '@/components/TheWheel.vue';
 import MediaPlayer from '@/components/MediaPlayer.vue';
 import LowerThirds from '@/components/LowerThirds.vue';
+
+import { useRoundStore } from '@/stores/round';
+// Pinia Store
+const store = useRoundStore();
 const showPlayer = ref(false);
 const showWheel = ref(true);
 
-// Pinia Store
-const store = useRoundStore();
-store.$patch({
-  player1Song: "apK2jCrfnsk",
-  player2Song: "LlVI7ZNiFlI"
-});
 </script>
 
 <template>

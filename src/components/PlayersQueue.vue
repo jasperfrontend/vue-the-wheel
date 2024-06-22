@@ -1,18 +1,24 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { watch, onMounted, ref } from 'vue';
 import { useRoundStore } from '@/stores/round';
 import { supabase } from '@/lib/supabaseClient';
 import PlayerAvatar from '@/components/PlayerAvatar.vue';
 import PlayerName from '@/components/PlayerName.vue';
+
+const props = defineProps({
+  side: String,
+  duration: Number,
+  currentTime: Number,
+  uid: String,
+  song: String,
+});
 
 const isLoading = ref(false);
 const playerModal = ref(false);
 const playersData = ref([]);
 const errorMessage = ref(null);
 const errorShown = ref(false);
-
-// Pinia Store
-const roundStore = useRoundStore();
+const store = useRoundStore();
 
 async function getPlayers() {
   isLoading.value = true;
@@ -33,13 +39,13 @@ async function getPlayers() {
 }
 
 async function setPlayer(pos, uid) {
-  console.log(pos + ', ' + uid);
+  console.log(pos + ': ' + uid);
 
   if(pos === 1) {
-    await roundStore.setPlayer1Uid(uid).then(console.log('player 1 logged'))
+    await store.setPlayer1Uid(uid).then(console.log('player 1 logged'))
   }
   if(pos === 2) {
-    await roundStore.setPlayer2Uid(uid).then(console.log('player 2 logged'));
+    await store.setPlayer2Uid(uid).then(console.log('player 2 logged'));
   }
 }
 
@@ -67,7 +73,7 @@ onMounted(() => {
         class="item" 
         v-for="player in playersData" :key="player.id"
         >
-          <PlayerName :uid="player.uid" />
+          <PlayerName :uid="player.uid" :name="player.name" />
         </div>
     </div>
   </div>
@@ -84,7 +90,7 @@ onMounted(() => {
     v-model="playerModal"
     transition="dialog-bottom-transition"
     scrim="black"
-    opacity="0.9"
+    opacity="1"
   >
     <h2 
       class="text-center">Player Queue 
@@ -93,8 +99,8 @@ onMounted(() => {
     <div class="d-flex flex-wrap text-center align-center justify-space-between">
       <div class="ma-5" v-for="player in playersData">
         <v-sheet class="pa-3 rounded" width="260">          
-          <PlayerAvatar :uid="player.uid" />
-          <PlayerName :uid="player.uid" />
+          <PlayerAvatar :uid="player.uid" :size="50" :src="player.avatar_url" />
+          <PlayerName :uid="player.uid" :name="player.name" />
           <div class="d-flex justify-space-between">
             <div>
               <v-btn 

@@ -2,8 +2,12 @@
 import PlayersQueue from './PlayersQueue.vue';
 import Player from './Player.vue';
 import { useRoundStore } from '@/stores/round';
+import { storeToRefs } from 'pinia';
+
 // Pinia Store
 const store = useRoundStore();
+const { player1Uid, player1Song, player2Uid, player2Song } = storeToRefs(store);
+
 </script>
 
 <template>
@@ -11,7 +15,7 @@ const store = useRoundStore();
 
     <!-- Player left -->
     <div class="column_left ma-1 mr-0 bg-blue-grey-darken-4 rounded">
-      <Player v-if="store.player1Uid" :uid="store.player1Uid" side="left" :currentTime="0" :song="store.player1Song" /> <!-- :duration="<seconds>" to start countdown -->
+      <Player :uid="player1Uid" :song="player1Song" side="left" :currentTime="0" /> <!-- :duration="<seconds>" to start countdown -->
     </div>
 
     <div class="column_center ma-1 bg-blue-grey-darken-3 rounded">
@@ -20,7 +24,7 @@ const store = useRoundStore();
 
     <!-- Player right -->
     <div class="column_right ma-1 ml-0 bg-blue-grey-darken-4 rounded">
-      <Player v-if="store.player2Uid" :uid="store.player2Uid" side="right" :currentTime="0" :song="store.player2Song" /> <!-- :duration="<seconds>" to start countdown -->
+      <Player :uid="player2Uid" :song="player2Song" side="right" :currentTime="0" /> <!-- :duration="<seconds>" to start countdown -->
     </div>
     
   </div>
@@ -38,7 +42,5 @@ const store = useRoundStore();
 .column_center {
   width: 10%;
 }
-.right {
-  flex-flow: row-reverse;
-}
+
 </style>

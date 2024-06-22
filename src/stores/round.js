@@ -10,6 +10,8 @@ export const useRoundStore = defineStore('round', {
     player2Uid: null,
     player1Song: null,
     player2Song: null,
+    player1Details: null,
+    player2Details: null,
   }),
   actions: {
     async startRound(categoryId) {
@@ -79,5 +81,21 @@ export const useRoundStore = defineStore('round', {
         }
       }
     },
+    async fetchPlayerDetails(playerUid, playerNumber) {
+      const { data, error } = await supabase
+        .from('players')
+        .select('name, avatar_url')
+        .eq('uid', playerUid)
+        .single();
+      if (error) {
+        console.error(`Error fetching details for player ${playerNumber}:`, error);
+      } else {
+        if (playerNumber === 1) {
+          this.player1Details = data;
+        } else if (playerNumber === 2) {
+          this.player2Details = data;
+        }
+      }
+    }
   },
 });
